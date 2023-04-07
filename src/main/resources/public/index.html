@@ -1,0 +1,61 @@
+<html>
+    <header>
+
+    </header>
+<body>
+
+<canvas id="myChart" style="width:100%;height:100%"></canvas>
+</body>
+
+<script type="application/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+<script type="application/javascript" src="/public/simpleAjax.js"></script>
+
+<script>
+            const xyValues = [
+                ];
+
+            const http = new simpleAJAX;
+
+            var baseStation = http.get('/all',
+              (err, st) => {
+                if(err) {
+                    console.log(err)
+                } else {
+                    const bs = JSON.parse(st)
+                    for(var keys in bs){
+                        const bsValue = {
+                         x:bs[keys].x,
+                         y:bs[keys].y
+                        }
+
+                        xyValues.push(bsValue)
+
+                    }
+
+
+                    new Chart("myChart", {
+                      type: "scatter",
+                      data: {
+                        datasets: [{
+                          pointRadius: 4,
+                          pointBackgroundColor: "rgba(0,0,255,1)",
+                          data: xyValues
+                        }]
+                      },
+                      options:{
+                        scales: {
+                                xAxes: [{
+                                  ticks: { min: -60, max: 60, stepSize: 10 },
+                                }],
+                                yAxes: [{
+                                  ticks: { min: -60, max: 60, stepSize: 10 },
+                                }],
+                              }
+                      }
+                    });
+                }
+              });
+
+    </script>
+
+</html>
