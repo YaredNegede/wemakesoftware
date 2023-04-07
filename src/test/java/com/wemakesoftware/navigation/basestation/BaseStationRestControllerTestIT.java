@@ -15,6 +15,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 import java.io.IOException;
 import java.time.Instant;
@@ -90,7 +91,7 @@ public class BaseStationRestControllerTestIT {
 
         BaseStationEntity baseStationEntity = baseStationEntities.get(0);
 
-        mockMvc.perform(get("/" + baseStationEntity.getId()))
+        mockMvc.perform(get("/basesStations/" + baseStationEntity.getUuid()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("base_station_id", Matchers.notNullValue()))
                 .andExpect(jsonPath("reports", Matchers.notNullValue()));
@@ -111,10 +112,15 @@ public class BaseStationRestControllerTestIT {
 
             try {
 
-                mockMvc.perform(post("/locationUpdate/" + baseStationEntity.getId())
+                mockMvc.perform(post("/location/" + baseStationEntity.getUuid())
                                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                                 .content(objectMapper.writeValueAsString(beatDto)))
                         .andExpect(status().isOk());
+
+                mockMvc.perform(get("/location/" + baseStationEntity.getUuid())
+                                .contentType(MediaType.APPLICATION_JSON_UTF8))
+                        .andExpect(status().isOk())
+                        .andDo(MockMvcResultHandlers.print());
 
             } catch (Exception e) {
                 log.debug(e.getMessage());

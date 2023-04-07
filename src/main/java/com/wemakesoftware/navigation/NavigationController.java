@@ -35,7 +35,7 @@ public class NavigationController {
     @Operation(
             summary = "Get all mobile station"
     )
-    @PostMapping(value = "/locationUpdate/{bsuuid}", produces = "application/json")
+    @PostMapping(value = "/location/{bsuuid}", produces = "application/json")
     public ResponseEntity<Void> locationUpdate(@PathVariable("bsuuid") long bsuuid,
                                                @RequestBody HearBeatDto hearBeatDto
     ) {
@@ -46,7 +46,7 @@ public class NavigationController {
     @Operation(
             summary = "Get base station"
     )
-    @GetMapping(value = "/{uuid}", produces = "application/json")
+    @GetMapping(value = "/basesStations/{uuid}", produces = "application/json")
     public ResponseEntity<ReportDTO> getBaseStation(@PathVariable("uuid") String uuid) {
         return ResponseEntity.ok(this.baseStationService.getBaseStation(uuid));
     }
