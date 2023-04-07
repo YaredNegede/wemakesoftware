@@ -35,7 +35,7 @@ public class NavigationController {
     @Operation(
             summary = "Get all mobile station"
     )
-    @PutMapping(value = "/{bsuuid}", produces = "application/json")
+    @PostMapping(value = "/locationUpdate/{bsuuid}", produces = "application/json")
     public ResponseEntity<Void> locationUpdate(@PathVariable("bsuuid") long bsuuid,
                                                @RequestBody HearBeatDto hearBeatDto
     ) {

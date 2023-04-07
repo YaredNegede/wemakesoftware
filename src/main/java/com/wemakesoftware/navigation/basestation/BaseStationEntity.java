@@ -48,6 +48,10 @@ public class BaseStationEntity {
             inverseJoinColumns = @JoinColumn(name = "mobile_station_id"))
     private Set<MobileStationEntity> mobileStations = new HashSet<>();
 
+    public Long getId() {
+        return id;
+    }
+
     public Long getTimestamp() {
         return timestamp;
     }

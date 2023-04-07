@@ -40,11 +40,11 @@ public class MobileStationServiceImpl implements MobileStationService {
 
         Optional<BaseStationEntity> bs = baseStationEntityRepository.findById(bsuuid);
 
-       if(bs.isPresent() && ms.isPresent()){
+       if(bs.isPresent()){
+
+           MobileStationEntity foundMobileStation = ms.orElseGet(MobileStationEntity::new);
 
            BaseStationEntity foundBaseStation = bs.get();
-
-           MobileStationEntity foundMobileStation = ms.get();
 
            foundMobileStation.setLastKnownX(foundBaseStation.getX());
 

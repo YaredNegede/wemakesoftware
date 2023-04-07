@@ -43,7 +43,7 @@ public class BaseStationServiceImpl implements BaseStationService {
 
     }
 
-    private BaseStationReport mapToReport(BaseStationEntity baseStationEntity, MobileStationEntity mobileStationEntity) {
+    protected BaseStationReport mapToReport(BaseStationEntity baseStationEntity, MobileStationEntity mobileStationEntity) {
 
         return BaseStationReport.builder()
                 .mobileStationId(mobileStationEntity.getMobileId())
@@ -53,7 +53,7 @@ public class BaseStationServiceImpl implements BaseStationService {
 
     }
 
-    private float calculateDistance(BaseStationEntity baseStationEntity, MobileStationEntity mobileStationEntity) {
+    protected static float calculateDistance(BaseStationEntity baseStationEntity, MobileStationEntity mobileStationEntity) {
 
         double ac = Math.abs(baseStationEntity.getY() - mobileStationEntity.getLastKnownY());
 
