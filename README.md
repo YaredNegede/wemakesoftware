@@ -10,3 +10,5 @@
 
 * [SWAGGER](http://localhost:8080/swagger-ui/index.html#/)
 * [BASE STATION LOCATIONS](http://localhost:8080/public/index.html) 
+* [PUBLIC PAGE](http://localhost:8080/public/index.html) 
+* [H2DATABASE](http://localhost:8080/h2-console) 

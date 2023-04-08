@@ -53,7 +53,7 @@ public class BaseStationServiceImpl implements BaseStationService {
 
     }
 
-    protected static float calculateDistance(BaseStationEntity baseStationEntity, MobileStationEntity mobileStationEntity) {
+    protected float calculateDistance(BaseStationEntity baseStationEntity, MobileStationEntity mobileStationEntity) {
 
         double ac = Math.abs(baseStationEntity.getY() - mobileStationEntity.getLastKnownY());
 

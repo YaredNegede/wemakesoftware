@@ -2,6 +2,8 @@ package com.wemakesoftware.navigation;
 
 import com.wemakesoftware.navigation.basestation.BaseStationEntity;
 import com.wemakesoftware.navigation.basestation.BaseStationEntityRepository;
+import com.wemakesoftware.navigation.mobilestation.MobileStationEntity;
+import com.wemakesoftware.navigation.mobilestation.MobileStationEntityRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -12,6 +14,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.time.Instant;
 import java.util.UUID;
 import java.util.stream.IntStream;
 
@@ -21,10 +24,17 @@ public class SeedDatabase implements ApplicationRunner {
 
     private final BaseStationEntityRepository baseStationEntityRepository;
 
-    public SeedDatabase(BaseStationEntityRepository baseStationEntityRepository) {
+    private final MobileStationEntityRepository mobileStationEntityRepository;
+
+    public SeedDatabase(BaseStationEntityRepository baseStationEntityRepository, MobileStationEntityRepository mobileStationEntityRepository) {
         this.baseStationEntityRepository = baseStationEntityRepository;
+        this.mobileStationEntityRepository = mobileStationEntityRepository;
     }
 
+    /**
+     * do not consider the quality of this code.
+     * @throws IOException
+     */
     private void seed() throws IOException {
 
         for (float i = -5; i <= 5f; i++) {
@@ -38,8 +48,16 @@ public class SeedDatabase implements ApplicationRunner {
                         j*10
                 );
 
+                MobileStationEntity mstation = new MobileStationEntity( i*10, j*10, Instant.now().toEpochMilli(), UUID.randomUUID().toString());
+
+                mobileStationEntityRepository.save(mstation);
+
+                baseStationEntity.getMobileStations().add(mstation);
+
                 baseStationEntityRepository.save(baseStationEntity);
+
             }
+
         }
 
     }
