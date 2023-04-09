@@ -71,11 +71,7 @@ public class BaseStationServiceImpl implements BaseStationService {
     @Override
     public List<BaseStationDTO> getBaseStations() {
 
-        List<Sort.Order> orders = new ArrayList<>();
-        orders.add(new Sort.Order(Sort.Direction.DESC, "X"));
-        orders.add(new Sort.Order(Sort.Direction.ASC, "Y"));
-
-        return this.baseStationEntityRepository.findAll(Sort.by(orders))
+        return this.baseStationEntityRepository.findAll()
                 .stream()
                 .map(this.baseStationEntityMapper::toDto)
                 .collect(Collectors.toList());
