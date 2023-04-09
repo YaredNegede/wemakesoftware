@@ -5,10 +5,13 @@ import com.wemakesoftware.navigation.basestation.BaseStationEntityRepository;
 import com.wemakesoftware.navigation.exceptions.NavigationException;
 import com.wemakesoftware.navigation.mobilestation.dto.HearBeatDto;
 import com.wemakesoftware.navigation.mobilestation.dto.MobileStationReportDTO;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class MobileStationServiceImpl implements MobileStationService {
 
@@ -34,15 +37,15 @@ public class MobileStationServiceImpl implements MobileStationService {
     }
 
     @Override
-    public void updateLocation(long bsuuid, HearBeatDto hearBeatDto) {
+    public void updateLocation(String bsuuid, HearBeatDto hearBeatDto) {
 
         Optional<MobileStationEntity>  ms = this.mobileStationEntityRepository.findByMobileId(hearBeatDto.getUuid());
 
-        Optional<BaseStationEntity> bs = baseStationEntityRepository.findById(bsuuid);
+        Optional<BaseStationEntity> bs = baseStationEntityRepository.findByUuid(bsuuid);
 
-       if(bs.isPresent()){
+       if(bs.isPresent() && ms.isPresent()){
 
-           MobileStationEntity foundMobileStation = ms.orElseGet(MobileStationEntity::new);
+           MobileStationEntity foundMobileStation = ms.get();
 
            BaseStationEntity foundBaseStation = bs.get();
 

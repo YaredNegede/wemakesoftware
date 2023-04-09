@@ -7,5 +7,5 @@ public interface MobileStationService {
 
     MobileStationReportDTO getMobileStationLocation(String uuid);
 
-    void updateLocation(long bsuuid, HearBeatDto hearBeatDto);
+    void updateLocation(String bsuuid, HearBeatDto hearBeatDto);
 }

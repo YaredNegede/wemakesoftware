@@ -5,10 +5,14 @@ import com.wemakesoftware.navigation.basestation.dto.BaseStationReport;
 import com.wemakesoftware.navigation.basestation.dto.ReportDTO;
 import com.wemakesoftware.navigation.exceptions.NavigationException;
 import com.wemakesoftware.navigation.mobilestation.MobileStationEntity;
+import jakarta.persistence.criteria.Order;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -28,18 +32,19 @@ public class BaseStationServiceImpl implements BaseStationService {
     @Override
     public ReportDTO getBaseStation(String uuid) {
 
-        BaseStationEntity res = this.baseStationEntityRepository.findByUuid(uuid);
+        Optional<BaseStationEntity> res = this.baseStationEntityRepository.findByUuid(uuid);
 
-        if(null == res){
+        if(!res.isPresent()){
             throw new NavigationException(NavigationException.NOT_FOUND);
         }
 
-        Set<BaseStationReport> msReport = res.getMobileStations()
+        Set<BaseStationReport> msReport = res.get()
+                                            .getMobileStations()
                                             .stream()
-                                            .map(mobileStationEntity -> mapToReport(res, mobileStationEntity))
+                                            .map(mobileStationEntity -> mapToReport(res.get(), mobileStationEntity))
                                             .collect(Collectors.toSet());
        
-        return new ReportDTO(res.getUuid(), msReport);
+        return new ReportDTO(res.get().getUuid(), msReport);
 
     }
 
@@ -66,7 +71,11 @@ public class BaseStationServiceImpl implements BaseStationService {
     @Override
     public List<BaseStationDTO> getBaseStations() {
 
-        return this.baseStationEntityRepository.findAll()
+        List<Sort.Order> orders = new ArrayList<>();
+        orders.add(new Sort.Order(Sort.Direction.DESC, "X"));
+        orders.add(new Sort.Order(Sort.Direction.ASC, "Y"));
+
+        return this.baseStationEntityRepository.findAll(Sort.by(orders))
                 .stream()
                 .map(this.baseStationEntityMapper::toDto)
                 .collect(Collectors.toList());

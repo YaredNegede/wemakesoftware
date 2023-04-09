@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -19,7 +20,7 @@ class BaseStationServiceImplTest {
 
     private BaseStationEntityRepository baseStationEntityRepository;
 
-    private BaseStationEntityMapper baseStationEntityMapper = new BaseStationEntityMapperImpl();
+    private final BaseStationEntityMapper baseStationEntityMapper = new BaseStationEntityMapperImpl();
 
     @BeforeEach
     public void setup(){
@@ -35,7 +36,7 @@ class BaseStationServiceImplTest {
 
         BaseStationEntity mock = mock(BaseStationEntity.class);
 
-        when(baseStationEntityRepository.findByUuid(any())).thenReturn(mock);
+        when(baseStationEntityRepository.findByUuid(any())).thenReturn(Optional.of(mock));
 
         baseStationService.getBaseStation("");
 

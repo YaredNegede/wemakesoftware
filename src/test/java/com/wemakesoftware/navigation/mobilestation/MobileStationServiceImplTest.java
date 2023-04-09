@@ -59,7 +59,7 @@ class MobileStationServiceImplTest {
                 .uuid(UUID.randomUUID().toString())
                 .build();
 
-        long uuid = 12;
+        String uuid = "12";
 
         BaseStationEntity mock = mock(BaseStationEntity.class);
 

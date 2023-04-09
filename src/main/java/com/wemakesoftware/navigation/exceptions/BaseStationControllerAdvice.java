@@ -1,4 +1,4 @@
-package com.wemakesoftware.navigation;
+package com.wemakesoftware.navigation.exceptions;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -15,8 +15,8 @@ public class BaseStationControllerAdvice {
      * @return
      */
     @ExceptionHandler(Exception.class)
-    public ResponseEntity.HeadersBuilder<?> handleRuntimeException(RuntimeException exception) {
-        return ResponseEntity.noContent();
+    public ResponseEntity<Error> handleRuntimeException(RuntimeException exception) {
+        return ResponseEntity.badRequest().body(new Error(NavigationException.NOT_FOUND,NavigationException.NOT_FOUND_CODE));
     }
 
 }

@@ -36,7 +36,7 @@ public class NavigationController {
             summary = "Get all mobile station"
     )
     @PostMapping(value = "/location/{bsuuid}", produces = "application/json")
-    public ResponseEntity<Void> locationUpdate(@PathVariable("bsuuid") long bsuuid,
+    public ResponseEntity<Void> locationUpdate(@PathVariable("bsuuid") String bsuuid,
                                                @RequestBody HearBeatDto hearBeatDto
     ) {
         this.mobileStationService.updateLocation(bsuuid,hearBeatDto);

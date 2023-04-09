@@ -8,39 +8,32 @@
 </body>
 
 <script type="application/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
-<script type="application/javascript" src="/public/simpleAjax.js"></script>
+<script src="simpleAjax.js"></script>
 
 <script>
-            const xyValues = [
-                ];
 
-            const http = new simpleAJAX;
-
-            var baseStation = http.get('/all',
-              (err, st) => {
-                if(err) {
-                    console.log(err)
-                } else {
-                    const bs = JSON.parse(st)
-                    for(var keys in bs){
-                        const bsValue = {
-                         x:bs[keys].x,
-                         y:bs[keys].y
-                        }
-
-                        xyValues.push(bsValue)
-
-                    }
-
-
-                    new Chart("myChart", {
+            const MS = [];
+            const BS = [];
+          
+            
+           let chart = new Chart("myChart", {
                       type: "scatter",
                       data: {
-                        datasets: [{
+                        datasets: [
+                          {
+                          label: 'MS',
+                          backgroundColor: '#00ff00',
                           pointRadius: 4,
-                          pointBackgroundColor: "rgba(0,0,255,1)",
-                          data: xyValues
-                        }]
+                          pointBackgroundColor: "#00ff00",
+                          data: MS
+                        },
+                        {
+                          label: 'BS',
+                          backgroundColor: '#ff0000',
+                          pointBackgroundColor: "#ff0000",
+                          data: BS
+                        }
+                      ]
                       },
                       options:{
                         scales: {
@@ -53,8 +46,100 @@
                               }
                       }
                     });
+                   
+            const http = new simpleAJAX;
+
+           
+        function locationUpdate(bs,bss){
+            
+            console.log("locationUpdate")
+
+            var picked = bs.reports[0].mobile_station_id
+
+            let timeout = 1000;
+            let index = 1;
+            for(var keys in bss){
+                    
+                    var payload = {
+                        uuid:picked,
+                        timestamp: new Date().getTime()
+                    }
+        
+                  function update(bsUUID,payload){
+
+                    http.post(`/location/${bsUUID}`,payload,(err,data)=>{
+                      if(!err){
+                        http.get(`/location/${picked}`,(err, data) => {
+                          
+                          if(!err){
+                            let res = JSON.parse(data)
+                            if(res) {
+                              
+                              const msValue = {
+                                      x:res.x,
+                                      y:res.y
+                                  }
+                              MS.push(msValue)
+                            }
+                          }
+                        })
+                      }
+                    })
+                  }
+                  
+                  setTimeout(update,timeout*(++index), bss[keys].uuid, payload);
+                   
+
                 }
-              });
+             
+
+        }
+              
+        function getBaseStation(bss) {
+            
+            console.log("getBaseStation")
+
+            http.get(`/basesStations/${bss[0].uuid}`,(err, data) => {
+              if(!err){
+                            var bs = JSON.parse(data)
+                              
+                            locationUpdate(bs,bss)
+              }
+            })
+
+        }
+  
+        function getAllBaseStation(){
+          
+           console.log("start...")
+
+            http.get("/all" , (error, response) => {
+                    
+                        if(!response.hasError){
+
+                              var bss = JSON.parse(response)
+                              
+                              for(var keys in bss) {
+
+                                  const bsValue = {
+                                      x:bss[keys].x,
+                                      y:bss[keys].y
+                                  }
+
+                                  BS.push(bsValue)      
+                            
+                              }
+                              
+                              getBaseStation(bss)
+
+                          
+                          }
+
+                    })
+            
+        }
+            
+        getAllBaseStation()
 
     </script>
 
